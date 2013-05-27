@@ -3,7 +3,7 @@
 ;; Lee Spector, lspector@hampshire.edu, 2010
 
 (ns codeexpress.examples.factorial
-  (:use [codeexpress.pushgp.pushgp]
+  (:use [codeexpress.ea.evolve]
         [codeexpress.pushstate]
         [codeexpress.interpreter]
         [clojure.math.numeric-tower]))
@@ -15,6 +15,8 @@
 
 (define-registered 
   in 
+  {:in []
+   :out [:integer]}
   (fn [state] (push-item (stack-ref :auxiliary 0 state) :integer state)))
 
 (defn factorial 
@@ -46,4 +48,6 @@
    :max-points-in-initial-program 100
    :population-size 5000
    :trivial-geography-radius 10
+   :ea :pushgp
+   :interpreter :push
    })

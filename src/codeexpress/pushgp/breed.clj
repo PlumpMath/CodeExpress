@@ -3,7 +3,7 @@
         [codeexpress.random]
         [codeexpress.pushgp.parent-selection]
         [codeexpress.pushgp.genetic-operators]
-        [codeexpress.simplification]))
+        [codeexpress.pushgp.simplification]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; genetic operators

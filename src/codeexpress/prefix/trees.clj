@@ -1,10 +1,14 @@
 (ns codeexpress.prefix.trees
-  (:use [codeexpress.globals]))
+  (:use [codeexpress globals random pushstate util]))
 
 (defn instruction-type
   "What type does this instruction return?"
   [inst]
   (first (keys (get @specification-table inst))))
+
+(defn expand-instruction
+  [x]
+  x)
 
 (defn random-tree
   "Generate a random tree. This should maintain typing."

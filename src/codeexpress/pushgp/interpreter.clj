@@ -1,11 +1,12 @@
 (ns codeexpress.interpreter
   (:use [codeexpress.pushstate]
         [codeexpress.globals]
-        [codeexpress.prefix trees]))
-;        [codeexpress.pushgp pushgp]))
+        [codeexpress.instructions.tag]
+        ;[codeexpress.experimental.tagged-code-macros]
+        ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; codeexpress interpreter
+;; push interpreter
 
 (def literals
   (atom
@@ -39,7 +40,7 @@
     (let [literal-type (recognize-literal instruction)]
       (cond
         literal-type (push-item instruction literal-type state)
-        ;(tag-instruction? instruction) (handle-tag-instruction instruction state)
+        (tag-instruction? instruction) (handle-tag-instruction instruction state)
         ;(tagged-code-macro? instruction) (handle-tag-code-macro instruction state)
         (contains? @instruction-table instruction) ((instruction @instruction-table) state)
         :else (do (println "Undefined instruction:" instruction)

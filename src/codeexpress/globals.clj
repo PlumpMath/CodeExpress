@@ -44,4 +44,7 @@
 (def solution-rates (atom (repeat 0)))
 
 ;; Lexicase Parent Selection (see Spector paper in GECCO-UP 2012 workshop proceedings)
-(def global-use-lexicase-selection (atom false)) ;; if true then no other selection params matter
+;(def global-use-lexicase-selection (atom false)) ;; if true then no other selection params matter
+
+;; Store some metadata about code and the instruction set
+(def code-parms (atom {:terminal-proportion 0 :terminals [] :functions []}))

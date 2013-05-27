@@ -2,11 +2,29 @@
   (:require [clojure.math.numeric-tower :as math]
             [clojure.zip :as zip]
             [clojure.walk :as walk])
-  (:use [codeexpress.globals]
-        [codeexpress.random]))
+  (:use [codeexpress globals random pushstate]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; utilities
+
+(defn arg-types
+  "Return the argument types of a function."
+  [func]
+  (:in (@specification-table func)))
+
+(defn update-code-parms
+  "Update the code-params map based upon some atom generators"
+  [atom-generators]
+  (let [atom-specs (filter identity
+                           (map #(get @specification-table %) 
+                                (filter symbol? atom-generators)))
+        terminals (filter #(empty? (:in %)) atom-specs);; maybe should check nil and empty so people can define-registered with lazy type specifications
+        functions (filter #(not (empty? (:in %))) atom-specs)
+        terminal-proportion (/ (count terminals) (+ (count terminals) (count functions)))]
+	  (reset! code-parms (assoc @code-parms
+	                            :terminal-proportion terminal-proportion
+	                            :terminals terminals
+	                            :functions functions))))
 
 (defn ensure-list [thing] ;; really make-list-if-not-seq, but close enough for here
   (if (seq? thing)

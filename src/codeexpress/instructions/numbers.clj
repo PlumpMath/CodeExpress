@@ -18,12 +18,12 @@
       state)))
 
 (define-registered integer_add 
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (adder :integer))
 (define-registered float_add
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (adder :float))
 
 (defn subtracter
@@ -39,12 +39,12 @@
       state)))
 
 (define-registered integer_sub
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (subtracter :integer))
 (define-registered float_sub
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (subtracter :float))
 
 (defn multiplier
@@ -60,12 +60,12 @@
       state)))
 
 (define-registered integer_mult
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (multiplier :integer))
 (define-registered float_mult
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (multiplier :float))
 
 (defn divider
@@ -86,12 +86,12 @@
       state)))
 
 (define-registered integer_div
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (divider :integer))
 (define-registered float_div
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (divider :float))
 
 (defn modder
@@ -112,12 +112,12 @@
       state)))
 
 (define-registered integer_mod
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (modder :integer))
 (define-registered float_mod
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (modder :float))
 
 (defn lessthaner
@@ -134,12 +134,12 @@
       state)))
 
 (define-registered integer_lt
-  {:in {:integer 2}
-   :out {:boolean 1}}
+  {:in [:integer :integer]
+   :out [:boolean]}
   (lessthaner :integer))
 (define-registered float_lt
-  {:in {:float 2}
-   :out {:boolean 1}}
+  {:in [:float :float]
+   :out [:boolean]}
   (lessthaner :float))
 
 (defn greaterthaner
@@ -156,18 +156,18 @@
       state)))
 
 (define-registered integer_gt
-  {:in {:integer 2}
-   :out {:boolean 1}}
+  {:in [:integer :integer]
+   :out [:boolean]}
   (greaterthaner :integer))
 (define-registered float_gt
-  {:in {:float 2}
-   :out {:boolean 1}}
+  {:in [:float :float]
+   :out [:boolean]}
   (greaterthaner :float))
 
 (define-registered 
   integer_fromboolean
-  {:in {:boolean 1}
-   :out {:integer 1}}
+  {:in [:boolean]
+   :out [:integer]}
   (fn [state]
     (if (not (empty? (:boolean state)))
       (let [item (stack-ref :boolean 0 state)]
@@ -177,8 +177,8 @@
 
 (define-registered 
   float_fromboolean
-  {:in {:boolean 1}
-   :out {:float 1}}
+  {:in [:boolean]
+   :out [:float]}
   (fn [state]
     (if (not (empty? (:boolean state)))
       (let [item (stack-ref :boolean 0 state)]
@@ -188,8 +188,8 @@
 
 (define-registered 
   integer_fromfloat
-  {:in {:float 1}
-   :out {:integer 1}}
+  {:in [:float]
+   :out [:integer]}
   (fn [state]
     (if (not (empty? (:float state)))
       (let [item (stack-ref :float 0 state)]
@@ -199,8 +199,8 @@
 
 (define-registered 
   float_frominteger
-  {:in {:integer 1}
-   :out {:float 1}}
+  {:in [:integer]
+   :out [:float]}
   (fn [state]
     (if (not (empty? (:integer state)))
       (let [item (stack-ref :integer 0 state)]
@@ -221,12 +221,12 @@
       state)))
 
 (define-registered integer_min
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (minner :integer))
 (define-registered float_min
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (minner :float))
 
 (defn maxer
@@ -242,18 +242,18 @@
       state)))
 
 (define-registered integer_max
-  {:in {:integer 2}
-   :out {:integer 1}}
+  {:in [:integer :integer]
+   :out [:integer]}
   (maxer :integer))
 (define-registered float_max
-  {:in {:float 2}
-   :out {:float 1}}
+  {:in [:float :float]
+   :out [:float]}
   (maxer :float))
 
 (define-registered 
   float_sin
-  {:in {:float 1}
-   :out {:float 1}}
+  {:in [:float]
+   :out [:float]}
   (fn [state]
     (if (not (empty? (:float state)))
       (push-item (keep-number-reasonable (Math/sin (stack-ref :float 0 state)))
@@ -263,8 +263,8 @@
 
 (define-registered 
   float_cos
-  {:in {:float 1}
-   :out {:float 1}}
+  {:in [:float]
+   :out [:float]}
   (fn [state]
     (if (not (empty? (:float state)))
       (push-item (keep-number-reasonable (Math/cos (stack-ref :float 0 state)))
@@ -274,8 +274,8 @@
 
 (define-registered 
   float_tan
-  {:in {:float 1}
-   :out {:float 1}}
+  {:in [:float]
+   :out [:float]}
   (fn [state]
     (if (not (empty? (:float state)))
       (push-item (keep-number-reasonable (Math/tan (stack-ref :float 0 state)))

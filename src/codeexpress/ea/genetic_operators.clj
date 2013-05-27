@@ -1,9 +1,9 @@
-(ns codeexpress.pushgp.genetic-operators
+(ns codeexpress.ea.genetic-operators
   (:use [codeexpress.util]
         [codeexpress.random]
         [codeexpress.globals]
         [codeexpress.individual]
-        [codeexpress.pushgp.node-selection])
+        [codeexpress.node-selection])
   (:require [clojure.string :as string]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
