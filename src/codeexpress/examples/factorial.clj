@@ -48,6 +48,5 @@
    :max-points-in-initial-program 100
    :population-size 5000
    :trivial-geography-radius 10
-   :ea :pushgp
    :interpreter :push
    })

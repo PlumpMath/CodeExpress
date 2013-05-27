@@ -42,16 +42,16 @@
                        :print-history true
                        :save-initial-population false)))
 
-(defn load-push-argmap
+(defn load-evolve-argmap
   [argmap]
   (doseq [[argkey argval] argmap]
     #_(assert (contains? @evolve-argmap argkey) (str "Argument key " argkey " is not a recognized argument to pushgp."))
-    (swap! push-argmap assoc argkey argval)))
+    (swap! evolve-argmap assoc argkey argval)))
 
 (defn reset-globals []
   (doseq [[gname gatom] (filter (fn [[a _]] (.startsWith (name a) "global-")) (ns-publics 'codeexpress.globals))]
-    (when (contains? @push-argmap (keyword (.substring (name gname) (count "global-"))))
-      (reset! @gatom (get @push-argmap (keyword (.substring (str gname) (count "global-"))))))))
+    (when (contains? @evolve-argmap (keyword (.substring (name gname) (count "global-"))))
+      (reset! @gatom (get @evolve-argmap (keyword (.substring (str gname) (count "global-"))))))))
 
 (defn make-agents-and-rng [{:keys [initial-population use-single-thread population-size
                                    max-points-in-initial-program atom-generators random-seed
@@ -134,7 +134,7 @@
       ((if use-single-thread swap! send)
        (nth child-agents i) 
        breed 
-       i (nth rand-gens i) pop @push-argmap)))
+       i (nth rand-gens i) pop @evolve-argmap)))
   (when-not use-single-thread (apply await child-agents))) ;; SYNCHRONIZE
 
 (defn install-next-generation [pop-agents child-agents {:keys [population-size use-single-thread]}]
@@ -147,29 +147,29 @@
   "The top-level EA."
   ([] (evolve '()))
   ([args]
-     (load-push-argmap args)
-     (binding [*thread-local-random-generator* (java.util.Random. (:random-seed @push-argmap))]
+     (load-evolve-argmap args)
+     (binding [*thread-local-random-generator* (java.util.Random. (:random-seed @evolve-argmap))]
        ;; set globals from parameters
        (reset-globals)
        (initial-report) ;; Print the inital report
-       (print-params @push-argmap)
+       (print-params @evolve-argmap)
        (printf "\nGenerating initial population...\n") (flush)
-       (let [{:keys [pop-agents child-agents rand-gens]} (make-agents-and-rng @push-argmap)]
+       (let [{:keys [pop-agents child-agents rand-gens]} (make-agents-and-rng @evolve-argmap)]
          ;; Main loop
          (loop [generation 0]
            (printf "\n\n-----\nProcessing generation: %s\nComputing errors..." generation)
-           (compute-errors pop-agents rand-gens @push-argmap)
+           (compute-errors pop-agents rand-gens @evolve-argmap)
            (flush)
            (printf "\nDone computing errors.") (flush)
            ;; possible parent reversion
-           (parental-reversion pop-agents generation @push-argmap)
+           (parental-reversion pop-agents generation @evolve-argmap)
            ;; report and check for success
-           (let [outcome (report-and-check-for-success pop-agents generation @push-argmap)]
+           (let [outcome (report-and-check-for-success pop-agents generation @evolve-argmap)]
              (cond (= outcome :failure) (do (printf "\nFAILURE\n") (flush))
                    (= outcome :continue) (do (printf "\nProducing offspring...") (flush)
-                                             (produce-new-offspring pop-agents child-agents rand-gens @push-argmap)
+                                             (produce-new-offspring pop-agents child-agents rand-gens @evolve-argmap)
                                              (printf "\nInstalling next generation...") (flush)
-                                             (install-next-generation pop-agents child-agents @push-argmap)
+                                             (install-next-generation pop-agents child-agents @evolve-argmap)
                                              (recur (inc generation)))
-                   :else (let [{:keys [error-function]} @push-argmap]
+                   :else (let [{:keys [error-function]} @evolve-argmap]
                            (final-report generation outcome error-function)))))))))
